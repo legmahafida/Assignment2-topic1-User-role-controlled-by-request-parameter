@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+.form-container {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #472dbb;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background-color: #4565a0;
+  }
+
+  p {
+    margin-top: 15px;
+  }
+        header {
+            position: fixed; /* يجعل الهيدر مثبتًا في أعلى الصفحة */
+            top: 0; /* يحدد موقعه في أعلى الصفحة */
+            right: 160px; /* يحدد موقعه من الجهة اليمنى */
+        }
+
+        header a {
+            text-decoration: none; /* إزالة الخط السفلي من الروابط */
+            color: #000; /* لون الرابط */
+            font-weight: bold; /* جعل النص غامق */
+        }
+    </style>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <a href="/logout">Logout</a>
+    </header>
+    <div class="form-container">
+        <h2>Login</h2>
+        <form  method="post" id="loginForm" onsubmit="handleLogin(); return false;">
+            <div class='form-group'>
+                <label for="username">Name:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="submit-btn" >Login</button>
+        </form>
+    </div>
+    <script>
+        let tokenExpirationTime = 3 * 60 * 1000; // 3 دقائق
+        let refreshTime = tokenExpirationTime - 30 * 1000; // 30 ثانية قبل انتهاء الصلاحية
+    
+        // دالة لتجديد الـ Access Token
+        async function refreshAccessToken() {
+            try {
+                const response = await fetch('/refresh', {
+                    method: 'POST',
+                    credentials: 'include' // تأكد من تضمين الكوكيز في الطلب
+                });
+    
+                if (!response.ok) {
+                    throw new Error('فشل في تجديد الـ Access Token');
+                }
+    
+                const data = await response.text();
+                console.log(data); // عرض رسالة النجاح أو التعامل معها كما تريد
+            } catch (error) {
+                console.error('خطأ في تجديد الـ Access Token:', error);
+            }
+        }
+    
+        // دالة لتحديد الوقت المتبقي وتجديد الـ Access Token
+        function startTokenRefreshTimer() {
+            setInterval(() => {
+                refreshAccessToken();
+            }, refreshTime);
+        }
+    
+        // استدعاء الدالة عند تحميل الصفحة
+        window.onload = () => {
+            startTokenRefreshTimer();
+        };
+    </script>
+</body>
+</html>
