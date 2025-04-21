@@ -1,5 +1,5 @@
-//userController
-import User from '../config.js'; // تأكد من المسار الصحيح لنموذج المستخدم
+
+import User from '../config.js'; 
 
 
 export const getUser  = async (req, res) => {
@@ -22,7 +22,7 @@ export const getUser  = async (req, res) => {
 export const getAdmin = async (req, res) => {
     try {
         const userId = req.user.userId; 
-        const user = await User.findById(userId).select('-password'); // استرجاع المستخدم مع استبعاد كلمة المرور
+        const user = await User.findById(userId).select('-password'); 
 
         if (!user || user.role !== 'admin') {
             return res.status(403).send("Access denied. You are not an admin.");

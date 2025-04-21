@@ -1,4 +1,4 @@
-//authController
+
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../config.js';
@@ -51,11 +51,11 @@ export const login = async (req, res) => {
             console.log(`accessToken: ${accessToken}`);
             console.log(`refreshToken: ${refreshToken}`);
      
-            // توجيه المستخدم بناءً على الدور
+            
     if (check.role === 'admin') {
-        return res.render('admin'); // توجيه إلى صفحة المسؤول
+        return res.render('admin'); 
     } else {
-        return res.render('user'); // توجيه إلى صفحة المستخدم
+        return res.render('user'); 
     }
             
         }
@@ -74,7 +74,7 @@ export const register = async (req, res) => {
             password: req.body.password
         };
 
-        // Check if the email already exists in the database
+        
         const existingUser  = await User.findOne({ name: data.name });
 
         if (existingUser ) {
@@ -82,7 +82,7 @@ export const register = async (req, res) => {
         }else{
         
             
-            // Hash the password using bcrypt
+            
             const saltRounds = 10; 
             const hashedPassword = await bcrypt.hash(data.password, saltRounds);
             data.password = hashedPassword; 

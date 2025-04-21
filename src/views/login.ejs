@@ -101,36 +101,36 @@ h2 {
         </form>
     </div>
     <script>
-        let tokenExpirationTime = 3 * 60 * 1000; // 3 دقائق
-        let refreshTime = tokenExpirationTime - 30 * 1000; // 30 ثانية قبل انتهاء الصلاحية
+        let tokenExpirationTime = 3 * 60 * 1000; 
+        let refreshTime = tokenExpirationTime - 30 * 1000; 
     
-        // دالة لتجديد الـ Access Token
+        
         async function refreshAccessToken() {
             try {
                 const response = await fetch('/refresh', {
                     method: 'POST',
-                    credentials: 'include' // تأكد من تضمين الكوكيز في الطلب
+                    credentials: 'include' 
                 });
     
                 if (!response.ok) {
-                    throw new Error('فشل في تجديد الـ Access Token');
+                    throw new Error('eror new Access Token');
                 }
     
                 const data = await response.text();
-                console.log(data); // عرض رسالة النجاح أو التعامل معها كما تريد
+                console.log(data); 
             } catch (error) {
-                console.error('خطأ في تجديد الـ Access Token:', error);
+                console.error('  Access Token:', error);
             }
         }
     
-        // دالة لتحديد الوقت المتبقي وتجديد الـ Access Token
+        
         function startTokenRefreshTimer() {
             setInterval(() => {
                 refreshAccessToken();
             }, refreshTime);
         }
     
-        // استدعاء الدالة عند تحميل الصفحة
+        
         window.onload = () => {
             startTokenRefreshTimer();
         };
