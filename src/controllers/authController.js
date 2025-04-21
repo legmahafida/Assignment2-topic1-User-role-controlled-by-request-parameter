@@ -105,7 +105,7 @@ export const refresh = (req, res) => {
 
 const cookies = req.cookies;
 
-  // تحقق من وجود الكوكيز
+  
   if (!cookies || !cookies.refreshToken) {
       return res.status(401).send("Unauthenticated");
   }
@@ -113,23 +113,23 @@ const cookies = req.cookies;
   const refreshToken = cookies.refreshToken;
 
   try {
-      // تحقق من صحة refreshToken
+      
       const decoded = jwt.verify(refreshToken, process.env.TOKEN_SECRET);
 
-      // إعداد الحمولة (payload) للـ Access Token الجديد
+      
       const payload = { userId: decoded.userId, role: decoded.role };
 
-      // إنشاء Access Token جديد
+      
       const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           expiresIn: "3m",
       });
 
-      // تخزين Access Token في كوكيز
+      
       res.cookie("accessToken", accessToken, {
           httpOnly: true,
-          secure: false, // تأكد من تغييرها إلى true في بيئة الإنتاج
+          secure: false, 
           sameSite: "Strict",
-          maxAge: 3 * 60 * 1000, // 3 دقائق
+          maxAge: 3 * 60 * 1000, 
       });
 
       res.send("Access token refreshed successfully");
@@ -142,7 +142,7 @@ const cookies = req.cookies;
 
 export const logout = (req, res) => {
     try {
-        // Clear the cookies for accessToken and refreshToken
+        
         res.clearCookie("accessToken", {
             httpOnly: true,
             secure: false,
